@@ -1,12 +1,17 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        ReactiveFormsModule
       ],
       declarations: [
         AppComponent
@@ -14,22 +19,51 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'test-frontend-melo'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('test-frontend-melo');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('test-frontend-melo app is running!');
   });
+
+  /* ---------- Check function create emplopyee ---------- */
+  it('Check function create employee', () => {
+    const employee = {
+      dni : '66666666',
+      name : 'Jose',
+      surname : 'Romero',
+      email: 'jromero@gmail.com',
+      age: 25,
+      dateOfBirth: '10 de enero del 2020',
+      department: 'Administración'
+    }
+    component.get(); 
+    let employeesTemp = component.employees.length; 
+    component.create(employee);
+    expect(component.employees.length).toBeGreaterThan(employeesTemp);
+  });
+
+  /* ---------- Check function edit emplopyee ---------- */
+  it('Check function edit employee', () => {
+    const employee = {
+      dni : '111111111',
+      name : 'Jesus Nuevo',
+      surname : 'Aguilar',
+      email: 'jaguilar@gmail.com',
+      age: 25,
+      dateOfBirth: '10 de enero del 2020',
+      department: 'Administración'
+    }
+    component.get(); 
+    let employeesTemp = component.employees.length; 
+    component.update(employee);
+    expect(component.employees.length).toEqual(employeesTemp);
+  });
+
+  /* ---------- Check function delete emplopyee ---------- */
+  it('Check function delete emplopyee', () => {
+    let employeesTemp = component.employees.length;
+    component.delete('111111111');
+    expect(component.employees.length).toBeLessThan(employeesTemp);
+  });
+  
 });
